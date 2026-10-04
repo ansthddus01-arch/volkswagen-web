@@ -1,0 +1,234 @@
+@use "./styles/base/colors" as color;
+@use "./styles/base/breakpoints" as bp;
+
+// 카드 440px 시안 기준 px 값을 카드 폭에 비례한 길이로 바꾼다 (--u는 .brand-news__slider에 정의)
+@function u($px) {
+    @return calc(var(--u) * #{$px});
+}
+
+.brand-news{
+    background: color.$black;
+    padding: bp.fluid(160) 0;
+    width: 100%;
+    gap: bp.fluid(64);
+    overflow: hidden;
+
+    &__title{
+        color: color.$white;
+        text-transform: uppercase;
+        font-size: bp.fluid(72);
+        font-weight: 700;
+    }
+
+    &__slider{
+        // 카드 폭: 화면이 줄어도 360px 아래로는 작아지지 않는다 (1920px에서 440px)
+        --card: clamp(360px, 22.917vw, 440px);
+        // 카드 440px 기준 1px에 해당하는 길이. 카드 안 요소는 카드 폭에 맞춰 같이 줄어든다
+        --u: calc(var(--card) / 440);
+
+        position: relative;
+        flex-shrink: 0;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    &__item{
+        position: relative;
+        height: u(550);
+        color: color.$white;
+
+        &::after{
+            content: "";
+            position: absolute;
+            top: u(265);
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(11, 10, 10, 0.3);
+            pointer-events: none;
+        }    }
+
+    &__image{
+        display: block;
+        width: 100%;
+        height: u(265);
+        object-fit: cover;
+    }
+
+    &__date{
+        margin: u(37) u(10) 0;
+        font-size: u(16);
+        font-weight: 300;
+    }
+
+    &__content{
+        gap: u(20);
+        margin: u(12) u(10) 0;
+    }
+
+    &__item-title{
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-clamp: 2;
+        overflow: hidden;
+        margin: 0;
+        font-size: u(32);
+        font-weight: 700;
+        word-break: keep-all;
+    }
+
+    &__des{
+        overflow: hidden;
+        margin: 0;
+        font-size: u(16);
+        font-weight: 400;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__link{
+        align-self: flex-end;
+        gap: 6px;
+        margin: u(39) u(10) 0 0;
+        color: color.$white;
+        font-size: u(16);
+        font-weight: 400;
+        text-decoration: none;
+    }
+
+    &__link-icon{
+        font-size: u(16);
+    }
+
+    &__nav{
+        position: absolute;
+        top: u(134);
+        left: 50%;
+        z-index: 2;
+        width: u(646);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    &__nav-button{
+        width: u(40);
+        height: u(40);
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: color.$white;
+        cursor: pointer;
+        pointer-events: auto;
+
+        .material-symbols-outlined{
+            font-size: u(40);
+        }
+    }
+
+    &__pagination{
+        gap: 17px;
+        height: 5px;
+        margin-top: bp.fluid(16);
+
+        .swiper-pagination-bullet{
+            width: 5px;
+            height: 5px;
+            border-radius: 5px;
+            background: color.$white;
+            opacity: 0.5;
+            cursor: pointer;
+            transition: width 0.3s ease, opacity 0.3s ease;
+        }
+
+        .swiper-pagination-bullet-active{
+            width: 36px;
+            opacity: 1;
+        }
+    }
+}
+
+.brand-news .brand-news__inner{
+    padding: 0 bp.fluid(60);
+}
+
+// 데스크톱에서는 Swiper가 카드 폭을 계산하지 않고(slidesPerView: "auto") 여기서 정한 폭을 쓴다
+@media (min-width: (bp.$tablet + 1px)) {
+    .brand-news__list .swiper-slide{
+        width: var(--card);
+    }
+}
+
+@include bp.tablet {
+    .brand-news{
+        padding: 48px 0;
+        gap: 25px;
+
+        &__title{
+            font-size: clamp(36px, 5.5vw, 56px);
+        }
+
+        &__slider{
+            align-self: auto;
+            width: auto;
+            margin: 0 16px;
+        }
+
+        &__item{
+            height: 605px;
+            background: #000;
+
+            &::after{
+                display: none;
+            }
+        }
+
+        &__image{
+            height: 305px;
+        }
+
+        &__date{
+            margin: 25px 28px 0 27px;
+            font-size: 16px;
+        }
+
+        &__des,
+        &__link,
+        &__link-icon{
+            font-size: 16px;
+        }
+
+        &__content{
+            gap: 13px;
+            margin: 3px 28px 0 27px;
+        }
+
+        &__item-title{
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            font-size: 24px;
+        }
+
+        &__link{
+            margin: auto 28px 33px 0;
+        }
+
+        &__pagination{
+            margin-top: 8px;
+        }
+    }
+
+    .brand-news .brand-news__inner{
+        padding: 0 16px;
+    }
+
+    .brand-news__slider .brand-news__nav{
+        display: none;
+    }
+}
+
+@include bp.mobile {
+    .brand-news__title{
+        font-size: 36px;
+    }
+}

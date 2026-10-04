@@ -1,0 +1,50 @@
+@use "../typography" as typo;
+@use "../breakpoints" as bp;
+
+.d-flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.lh-100 {
+  line-height: typo.$line-height-100;
+}
+
+.lh-125 {
+  line-height: typo.$line-height-125;
+}
+
+.lh-150 {
+  line-height: typo.$line-height-150;
+}
+
+.desktop-only {
+  @include bp.tablet {
+    display: none;
+  }
+}
+
+.tablet-only {
+  @media (min-width: (bp.$tablet + 1px)) {
+    display: none;
+  }
+}

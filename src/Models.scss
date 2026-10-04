@@ -1,0 +1,313 @@
+@use "./styles/base/colors" as color;
+@use "./styles/base/breakpoints" as bp;
+
+// 차량이 바뀔 때 이동·크기·투명도 전환 시간
+$slide-duration: 0.8s;
+
+.models{
+    background-color: color.$background-1;
+    padding: bp.fluid(160) 0;
+    overflow: hidden;
+}
+
+.models__container{
+  gap: bp.fluid(40);
+}
+
+.models__top{
+  position: relative;
+  z-index: 1;
+  padding: 0 bp.fluid(124) 0 bp.fluid(60);
+}
+
+.models__intro{
+    gap: bp.fluid(24);
+    flex: 0 0 bp.fluid(693);
+    color: color.$black;
+
+    .models__title{
+        font-size: bp.fluid(72);
+        font-weight: 700;
+    }
+    .models__description{
+        font-size: bp.fluid(32);
+        font-weight: 400;
+        white-space: nowrap;
+    }
+}
+
+.model__specs {
+  flex: 0 0 bp.fluid(685);
+
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: space-between;
+  row-gap: bp.fluid(110);
+
+}
+
+.model__spec{
+  gap: bp.fluid(10);
+}
+
+.model__spec-label{
+  font-size: max(12px, #{bp.fluid(16)});
+  font-weight: 400;
+  color: color.$gray-2;
+}
+
+.model__spec-value{
+  font-size: bp.fluid(54);
+  font-weight: 700;
+  white-space: nowrap;
+  color: color.$black;
+}
+.model__spec-desc{
+  white-space: pre-line;
+  font-size: max(12px, #{bp.fluid(24)});
+  font-weight: 400;
+  line-height: 130%;
+  color: color.$gray-1;
+}
+
+.models__stage{
+  // 차량 한 칸의 폭과 간격: 트랙 이동 거리와 모델명 위치 계산에 같이 쓴다
+  --item-w: #{bp.fluid(1192)};
+  // 옆 차량이 0.47배로 줄어든 뒤 가운데 차량과 73px 떨어지도록 칸을 겹친다 (0.265 = (1 - 0.47) / 2)
+  --gap: calc(#{bp.fluid(73)} - var(--item-w) * 0.265);
+
+  position: relative;
+}
+
+.models__items{
+  position: relative;
+  z-index: 1;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.models__items--dragging{
+  cursor: grabbing;
+
+  .models__track,
+  .models__item{
+    transition: none;
+  }
+}
+
+.models__track{
+  // --index번째 차량이 가운데 오도록 이동, 드래그 중에는 --drag만큼 더 움직인다
+  transform: translateX(
+    calc(50% - (var(--item-w) + var(--gap)) / 2 - var(--index) * (var(--item-w) + var(--gap)) + var(--drag))
+  );
+  transition: transform $slide-duration ease-in-out;
+}
+
+.models__item{
+  flex: 0 0 var(--item-w);
+  // --p: 가운데에서 떨어진 정도 (0 = 가운데, 1 = 한 칸 이상)
+  margin: 0 calc(var(--gap) / 2);
+  transform: scale(calc(1 - 0.53 * var(--p)));
+  opacity: calc(1 - 0.8 * var(--p));
+  transition:
+    transform $slide-duration ease-in-out,
+    opacity $slide-duration ease-in-out;
+}
+
+.models__item--active{
+  position: relative;
+  z-index: 1;
+}
+
+.models__image{
+  width: 100%;
+  pointer-events: none;
+}
+
+.models__model-name{
+  position: absolute;
+  top: calc(-1 * #{bp.fluid(125)});
+  left: calc(50% - var(--item-w) / 2 - #{bp.fluid(246)});
+  z-index: 0;
+
+  font-size: bp.fluid(320);
+  font-weight: 800;
+  white-space: nowrap;
+  color: #d8d8d8;
+  opacity: 0.5;
+}
+
+// 첫 줄 스펙 설명은 항상 두 줄 높이를 잡아 둔다: 모델마다 설명 줄 수가 달라도 아래 차량이 위아래로 밀리지 않게
+.model__spec:nth-child(-n + 2) .model__spec-desc{
+  min-height: 2.6em;
+}
+
+// 좌우 화살표: 가운데 차량 칸 바로 바깥, 시안 기준 위에서 200px
+.models__arrow{
+  position: absolute;
+  top: bp.fluid(200);
+  z-index: 2;
+  width: bp.fluid(56, 40);
+  height: bp.fluid(56, 40);
+  transition: opacity 0.2s ease;
+
+  img{
+    width: 100%;
+    height: 100%;
+  }
+
+  &:disabled{
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+.models__arrow--prev{
+  right: calc(50% + var(--item-w) / 2 + #{bp.fluid(19.5)});
+
+  img{
+    transform: scaleX(-1);
+  }
+}
+
+.models__arrow--next{
+  left: calc(50% + var(--item-w) / 2 + #{bp.fluid(19.5)});
+}
+
+.model__specs,
+.models__model-name{
+  animation: models-fade-up 0.5s ease both;
+}
+
+@keyframes models-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@include bp.tablet {
+  .models{
+    padding: 64px 0;
+    background-color: #fff;
+  }
+
+  .models__container{
+    gap: 0;
+    padding: 0 16px;
+  }
+
+  .models .models__top{
+    display: contents;
+  }
+
+  .models__intro{
+    flex: none;
+    gap: 16px;
+
+    .models__title{
+      font-size: clamp(36px, 5.5vw, 56px);
+    }
+    .models__description{
+      font-size: clamp(16px, 2.4vw, 22px);
+      line-height: 1.25;
+      white-space: normal;
+    }
+  }
+
+  .models__stage{
+    --item-w: clamp(320px, 60vw, 600px);
+    --gap: calc(40px - var(--item-w) * 0.265);
+
+    order: 2;
+    margin-top: 46px;
+  }
+
+  .models__items{
+    margin-top: 35px;
+  }
+
+  .models__model-name{
+    position: static;
+
+    font-size: 40px;
+    font-weight: 700;
+    text-align: center;
+    color: #000;
+    opacity: 1;
+  }
+
+  .models__actions{
+    gap: 8px;
+    margin-top: 46px;
+  }
+
+  .models__button{
+    flex: 1;
+    max-width: 118px;
+    height: 46px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .models__button--fill{
+    background: #000;
+    color: #fff;
+  }
+
+  .model__specs {
+    flex: none;
+    order: 3;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: normal;
+    column-gap: 29px;
+    row-gap: 72px;
+    margin-top: 42px;
+  }
+
+  .model__spec{
+    gap: 20px;
+  }
+
+  .model__spec-label{
+    font-size: 14px;
+    color: #1b1b1b;
+  }
+
+  .model__spec-value{
+    font-size: 24px;
+  }
+
+  .model__spec-desc{
+    font-size: 16px;
+  }
+}
+
+@include bp.mobile {
+  .models__intro{
+    .models__title{
+      font-size: 36px;
+    }
+    // 좁은 화면에서도 두 줄을 유지하도록 화면 폭에 맞춰 줄인다
+    .models__description{
+      font-size: min(16px, calc((100vw - 32px) / 17.8));
+    }
+  }
+
+  .models__stage{
+    --item-w: min(320px, calc(100vw - 32px));
+  }
+
+  .model__specs {
+    grid-template-columns: minmax(0, 161fr) minmax(0, 180fr);
+  }
+
+  .model__spec-value{
+    font-size: min(24px, 6.6vw);
+  }
+}

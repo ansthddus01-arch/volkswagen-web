@@ -1,0 +1,192 @@
+@use "./styles/base/colors" as color;
+@use "./styles/base/breakpoints" as bp;
+
+.footer{
+    padding: bp.fluid(160) bp.fluid(60);
+    background: color.$black;
+    color: #fff;
+}
+
+.footer__container{
+  gap: bp.fluid(168);
+}
+
+.footer__quick-link{
+  gap: bp.fluid(34);
+}
+
+.footer__quick-icon{
+  width: bp.fluid(96);
+  height: bp.fluid(96);
+}
+
+.footer__quick-label{
+  font-size: bp.fluid(24, 14);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.footer__menus{
+  flex: 0 1 bp.fluid(986);
+}
+
+.footer__menu{
+  gap: bp.fluid(48);
+}
+
+.footer__menu-title{
+  font-size: bp.fluid(16, 13);
+  font-weight: 600;
+}
+
+.footer__menu-list{
+  gap: 10px;
+}
+
+.footer__menu-link{
+  display: block;
+  font-size: 12px;
+  font-weight: 300;
+  white-space: nowrap;
+}
+
+.footer__sns{
+  flex: 0 0 240px;
+  gap: bp.fluid(40);
+}
+
+.footer__sns-list{
+  gap: 20px;
+}
+
+.footer__blog{
+  position: relative;
+  display: block;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+}
+
+.footer__blog-icon{
+  position: absolute;
+  top: 5px;
+  left: 3px;
+}
+
+.footer__blog-text{
+  position: absolute;
+  top: 8px;
+  left: 5px;
+  color: #000;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+.footer__menu-toggle{
+  width: 100%;
+  text-align: left;
+  cursor: default;
+}
+
+@include bp.tablet {
+  .footer{
+      padding: 53px 16px;
+  }
+
+  .footer__container{
+    gap: 104px;
+  }
+
+  .footer .footer__quick{
+    flex-wrap: wrap;
+    justify-content: center;
+    // 좁은 화면에서도 2열을 유지하도록 열 간격만 줄인다
+    column-gap: min(83px, calc(100vw - 248px));
+    row-gap: 90px;
+    width: 100%;
+    max-width: 299px;
+    margin: 0 auto;
+
+    li{
+      flex: 0 0 108px;
+    }
+  }
+
+  .footer__quick-link{
+    gap: 16px;
+  }
+
+  .footer__quick-icon{
+    width: 56px;
+    height: 56px;
+  }
+
+  .footer__quick-link .footer__quick-label{
+    max-width: 110px;
+    font-size: 16px;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+    word-break: keep-all;
+  }
+
+  .footer__bottom{
+    flex-direction: column;
+    gap: 21px;
+  }
+
+  .footer__menus{
+    flex: none;
+    flex-direction: column;
+    gap: 21px;
+  }
+
+  .footer__menu{
+    gap: 0;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #fff;
+  }
+
+  .footer__sns{
+    flex: none;
+    gap: 0;
+  }
+
+  .footer__menu-title{
+    font-size: 16px;
+  }
+
+  .footer__menu-toggle{
+    cursor: pointer;
+  }
+
+  .footer__menu-chevron{
+    font-size: 24px;
+    transition: transform 0.2s ease;
+  }
+
+  .footer__menu-list,
+  .footer__sns-list{
+    height: 0;
+    overflow: hidden;
+  }
+
+  .footer__menu-link{
+    font-size: 14px;
+  }
+
+  .footer__menu--open{
+    .footer__menu-list,
+    .footer__sns-list{
+      height: auto;
+      margin-top: 24px;
+    }
+
+    .footer__menu-chevron{
+      transform: rotate(180deg);
+    }
+  }
+}
+

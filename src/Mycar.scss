@@ -1,0 +1,229 @@
+@use "./styles/base/colors" as color;
+@use "./styles/base/breakpoints" as bp;
+
+// 시트가 왼쪽 위에서 최종 위치까지 가라앉는 시간
+$seat-sink-duration: 3.6s;
+
+.mycar{
+    position: relative;
+    height: bp.fluid(1072);
+    padding: bp.fluid(160) bp.fluid(60);
+    overflow: hidden;
+    background: linear-gradient(
+        240deg,
+        #727D8C 10%,
+        #2F3441 51%,
+        #141623 85%
+    );
+}
+
+.mycar__seat-image{
+    // 시작 위치: 왼쪽 위 모서리 밖 (이미지 자기 크기 기준 이동량)
+    --seat-x: -95%;
+    --seat-y: -95%;
+    --seat-tilt: -14deg;
+
+    position: absolute;
+    top: 0;
+    // 시안에서 이미지가 오른쪽으로 258px 넘어가 잘린다
+    right: calc(-1 * #{bp.fluid(258)});
+    width: auto;
+    max-width: none;
+    height: 100%;
+    will-change: transform, translate, rotate;
+}
+
+// 화면에 들어오기 전에는 시작 위치에서 대기
+.mycar:not(.mycar--in) .mycar__seat-image{
+    translate: var(--seat-x) 0;
+    rotate: var(--seat-tilt);
+    transform: translateY(var(--seat-y));
+}
+
+// 가로·세로·기울기·크기를 따로 움직여서 중간에 속도가 꺾이는 지점 없이 이어지게 한다.
+// 가로는 먼저 잦아들고 세로는 끝까지 천천히 내려가서, 옆으로 밀려 들어오다 가라앉는 궤적이 된다.
+// 가라앉기가 끝나면 같은 자리에서 위아래로 떠 있는 반동으로 이어진다.
+.mycar--in .mycar__seat-image{
+    animation:
+        mycar-seat-drift $seat-sink-duration cubic-bezier(0.16, 0.6, 0.3, 1) both,
+        mycar-seat-sink $seat-sink-duration cubic-bezier(0.35, 0.2, 0.25, 1) both,
+        mycar-seat-sway $seat-sink-duration ease-in-out both,
+        mycar-seat-float 4s ease-in-out $seat-sink-duration infinite alternate;
+}
+
+// 가로 이동
+@keyframes mycar-seat-drift {
+    from {
+        translate: var(--seat-x) 0;
+    }
+    to {
+        translate: 0 0;
+    }
+}
+
+// 세로 이동 (가라앉기)
+@keyframes mycar-seat-sink {
+    from {
+        transform: translateY(var(--seat-y));
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+// 기울기와 크기: 물살에 한 번 넘어갔다가 제자리로 돌아온다
+@keyframes mycar-seat-sway {
+    0% {
+        rotate: var(--seat-tilt);
+        scale: 1;
+    }
+    55% {
+        rotate: 5deg;
+        scale: 0.95;
+    }
+    100% {
+        rotate: 0deg;
+        scale: 1;
+    }
+}
+
+@keyframes mycar-seat-float {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-8px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mycar .mycar__seat-image{
+        animation: none;
+        translate: none;
+        rotate: none;
+        transform: none;
+    }
+}
+
+.mycar__content{
+  position: relative;
+  z-index: 1;
+  width: bp.fluid(669);
+  gap: bp.fluid(120);
+}
+.mycar__text{
+    gap: bp.fluid(40);
+    color: color.$white;
+
+    .mycar__title{
+      font-size: bp.fluid(72);
+      font-weight: 700;
+    }
+    .mycar__description{
+      font-size: bp.fluid(32);
+      font-weight: 400;
+    }
+}
+
+.mycar__search{
+  gap: bp.fluid(20);
+
+  width: 100%;
+  height: bp.fluid(60, 40);
+  padding: 0 bp.fluid(20);
+
+  border: 1px solid color.$gray-3;
+  border-radius: 5px;
+  background: color.$white;
+  transition: border-color 0.2s ease, filter 0.2s ease;
+
+  &:focus-within{
+    border-color: color.$gray-2;
+    filter: drop-shadow(0 0 5px #6D7786) drop-shadow(0 0 10px #6D7786);
+  }
+}
+
+.mycar__search-icon{
+    font-size: bp.fluid(24, 16);
+    color: color.$gray-1;
+    transform: scaleX(-1);
+}
+
+.mycar__search-input{
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+
+    color: color.$black;
+    font-size: bp.fluid(20, 13);
+
+    &::placeholder{
+        color: color.$gray-3;
+    }
+}
+
+@include bp.tablet {
+  .mycar{
+      height: auto;
+      padding: 64px 20px 0;
+  }
+
+  .mycar__seat-image{
+      // 세로 배치에서는 텍스트 위쪽(섹션 왼쪽 위)에서 내려온다
+      --seat-x: -90%;
+      --seat-y: -200%;
+
+      position: static;
+      order: 1;
+      width: calc(100% + 40px);
+      height: clamp(320px, 60vw, 560px);
+      margin: 24px -20px 0;
+      object-fit: cover;
+      object-position: 56% center;
+  }
+
+  .mycar__content{
+    width: 100%;
+    max-width: 669px;
+    gap: 40px;
+  }
+
+  .mycar__text{
+      gap: 16px;
+
+      .mycar__title{
+        font-size: clamp(36px, 5.5vw, 56px);
+      }
+      .mycar__description{
+        font-size: clamp(16px, 2.4vw, 22px);
+        line-height: 1.25;
+      }
+  }
+
+  .mycar__search{
+    gap: 15px;
+    height: 53px;
+    padding: 10px 16px;
+  }
+
+  .mycar__search-icon{
+      font-size: 24px;
+  }
+
+  .mycar__search-input{
+      font-size: 16px;
+  }
+}
+
+@include bp.mobile {
+  .mycar__text{
+      .mycar__title{
+        font-size: 36px;
+      }
+      .mycar__description{
+        font-size: 16px;
+      }
+  }
+}

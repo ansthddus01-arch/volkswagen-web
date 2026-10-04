@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "date": "2026-09-14",
+    "model": "Golf GTI",
+    "category": "신차 / 에디션",
+    "image": "https://assets.volkswagen.com/is/image/volkswagenag/Golf%20GTI%20Black%20Edition_KV-1?Zm10PXBuZy1hbHBoYSZ3aWQ9ODAwJmJmYz1vZmYmMGFmYw=%3D",
+    "title": "폭스바겐코리아, 골프 GTI 국내 출시 20주년 기념 ‘골프 GTI 블랙 에디션’ 출시",
+    "description": "블랙 바디와 레드 허니콤 패턴으로 GTI의 스포티한 감성을 강조한 한정 에디션",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-09-14.html"
+  },
+  {
+    "id": 2,
+    "date": "2026-07-31",
+    "model": "Touareg",
+    "category": "SUV / 이벤트",
+    "image": "https://assets.volkswagen.com/is/image/volkswagenag/2-470?Zml0PWNyb3AsMSZmbXQ9d2VicC1hbHBoYSZxbHQ9Nzkmd2lkPTEyODAmaGVpPTcyMCZhbGlnbj0wLjAwLDAuMDAmYmZjPW9mZiY2NmNm",
+    "title": "폭스바겐코리아, ‘투아렉 파이널 에디션’ 시승 및 출고 고객 대상 특별 이벤트 실시",
+    "description": "투아렉 파이널 에디션 시승 및 출고 고객을 위한 특별 이벤트",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-07-31.html"
+  },
+  {
+    "id": 3,
+    "date": "2026-06-16",
+    "model": "ID.5",
+    "category": "전기차",
+    "image": "https://assets.volkswagen.com/is/image/volkswagenag/1-490?Zm10PXBuZy1hbHBoYSZ3aWQ9ODAwJmJmYz1vZmYmMGFmYw=%3D",
+    "title": "폭스바겐코리아, 쿠페형 순수 전기 SUV ‘2026년형 ID.5’ 고객 인도 개시",
+    "description": "451km 복합 주행거리와 쿠페 스타일을 갖춘 2026년형 ID.5 국내 고객 인도 시작",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-06-16.html"
+  },
+  {
+    "id": 4,
+    "date": "2026-05-18",
+    "model": "ID. Polo GTI",
+    "category": "전기차 / GTI",
+    "image": "https://assets.volkswagen.com/is/image/volkswagenag/1-485?Zm10PXBuZy1hbHBoYSZ3aWQ9ODAwJmJmYz1vZmYmMGFmYw=%3D",
+    "title": "폭스바겐, 첫 순수 전기 GTI ‘ID. 폴로 GTI’ 세계 최초 공개",
+    "description": "GTI 탄생 50주년을 맞아 공개된 폭스바겐 최초의 순수 전기 GTI",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-05-18.html"
+  },
+  {
+    "id": 5,
+    "date": "2026-05-11",
+    "model": "Volkswagen R",
+    "category": "퍼포먼스 / 모터스포츠",
+    "image": "https://assets.volkswagen.com/is/image/volkswagenag/1-481?Zm10PXBuZy1hbHBoYSZ3aWQ9ODAwJmJmYz1vZmYmMGFmYw=%3D",
+    "title": "폭스바겐 R 브랜드, 출범 25주년 맞아 2027년 ‘뉘르부르크링 24시’ 내구레이스 출전",
+    "description": "폭스바겐 R 브랜드 출범 25주년을 맞아 2027년 뉘르부르크링 24시 내구레이스 출전",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-05-11.html"
+  },
+  {
+    "id": 6,
+    "date": "2026-04-08",
+    "model": "Touareg",
+    "category": "SUV / 에디션",
+    "image": "https://assets.volkswagen.com/is/image/volkswagenag/1-464?Zm10PXBuZy1hbHBoYSZ3aWQ9ODAwJmJmYz1vZmYmMGFmYw=%3D",
+    "title": "폭스바겐코리아, ‘투아렉 파이널 에디션’ 고객 인도 개시",
+    "description": "폭스바겐 플래그십 SUV 투아렉의 특별한 파이널 에디션 고객 인도 시작",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-04-08.html"
+  },
+  {
+    "id": 7,
+    "date": "2026-03-03",
+    "model": "Golf GTI",
+    "category": "GTI / 공모전",
+    "image": "/images/Brand_news_1_img.jpg",
+    "title": "폭스바겐코리아, 골프 GTI 탄생 50주년 기념 ‘골프 GTI 대학생 AI 영상 광고 공모전’ 개최",
+    "description": "골프 GTI 탄생 50주년을 기념한 대학생 AI 영상 광고 공모전",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-03-03.html"
+  },
+  {
+    "id": 8,
+    "date": "2026-02-24",
+    "model": "Atlas",
+    "category": "SUV / 캠페인",
+    "image": "https://assets.volkswagen.com/is/image/volkswagenag/1-451?Zm10PXBuZy1hbHBoYSZ3aWQ9ODAwJmJmYz1vZmYmMGFmYw=%3D",
+    "title": "폭스바겐코리아, ‘위대하게 아빠답게, 위대한 패밀리 SUV’ 아틀라스 신규 광고 캠페인 전개",
+    "description": "대형 패밀리 SUV 아틀라스의 공간성과 라이프스타일 가치를 담은 신규 캠페인",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-02-24.html"
+  },
+  {
+    "id": 9,
+    "date": "2026-02-20",
+    "model": "Atlas",
+    "category": "SUV / 시승",
+    "image": "/images/Brand_news_2_img.jpg",
+    "title": "폭스바겐코리아, 2026년 ‘Feel&Drive’ 시승 캠페인 전개",
+    "description": "2월 대표 모델은 대형 SUV ‘아틀라스’",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-02-20.html"
+  },
+  {
+    "id": 10,
+    "date": "2026-01-26",
+    "model": "ID.4",
+    "category": "전기차",
+    "image": "/images/Brand_news_3_img.jpg",
+    "title": "폭스바겐 순수 전기 SUV ‘ID.4’, 2026년 수입 전기차 중 최대 보조금 확보",
+    "description": "2026년 수입 전기차 중 최대 수준의 보조금을 확보한 폭스바겐 ID.4",
+    "link": "https://www.volkswagen.co.kr/ko/promotion_news/News_2026/2026-01-26_.html"
+  }
+]

@@ -1,0 +1,291 @@
+@use "./styles/base/colors" as color;
+@use "./styles/base/breakpoints" as bp;
+
+// 차량 등장 인터랙션 타이밍
+// 한 대의 시퀀스: 등장 0.9초 + 내려앉기 0.3초 (키프레임의 75% 지점이 도착 시점)
+$car-duration: 1.2s;
+// 앞 차량이 완전히 멈춘 뒤 다음 차량이 시작하기까지의 쉬는 시간
+$car-gap: 0.15s;
+// 차량 사이 시작 간격 = 시퀀스 전체 + 쉬는 시간 → 시퀀스가 서로 겹치지 않는다
+$car-stagger: $car-duration + $car-gap;
+// 연무가 퍼졌다 사라지는 시간 ($car-stagger보다 짧아야 연무끼리 겹치지 않는다)
+$haze-duration: 1s;
+
+.preowned{
+    height: bp.fluid(1184);
+    padding: bp.fluid(160) bp.fluid(60);
+    overflow: hidden;
+    background: color.$background-2;
+}
+
+.preowned__content{
+  flex: 0 0 bp.fluid(679);
+  gap: bp.fluid(24);
+}
+
+.preowned__text{
+    gap: bp.fluid(20);
+    color: color.$black;
+
+    .preowned__title{
+      font-size: bp.fluid(72);
+      font-weight: 700;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .preowned__description{
+      font-size: bp.fluid(32);
+      font-weight: 400;
+      white-space: nowrap;
+    }
+}
+
+.preowned__search{
+  gap: bp.fluid(10);
+
+  width: 100%;
+  height: bp.fluid(61, 40);
+  padding: 0 bp.fluid(20);
+
+  border: 1px solid color.$black;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.preowned__search-icon{
+    font-size: bp.fluid(24, 16);
+    color: color.$gray-1;
+    transform: scaleX(-1);
+}
+
+.preowned__search-input{
+    flex: 1;
+    min-width: 0;
+
+    color: color.$black;
+    font-size: bp.fluid(20, 13);
+
+    &::placeholder{
+        color: #757575;
+    }
+}
+
+// 차량 3대가 놓이는 영역 (시안 1244×864). 차량 위치와 크기는 이 영역 기준 %라서 화면 폭이 바뀌어도 배치가 유지된다
+.preowned__cars{
+    position: relative;
+    flex-shrink: 0;
+    width: bp.fluid(1244);
+    height: bp.fluid(864);
+}
+
+// 차량별 최종 위치(--x, --y)와 폭(--w), 등장 순서(--delay). 차량과 그 차량의 먼지 효과가 같은 값을 쓴다.
+// 뒤(왼쪽)에서 앞(오른쪽)으로 갈수록 커지고, 맨 앞 차량은 화면 오른쪽에서 잘린다
+.preowned__car--golf,
+.preowned__dust--golf{
+    --x: 1.9%;
+    --y: 33%;
+    --w: 41.3%;
+    --delay: 0s;
+}
+
+.preowned__car--id5,
+.preowned__dust--id5{
+    --x: 17.3%;
+    --y: 28.7%;
+    --w: 54.4%;
+    --delay: #{$car-stagger};
+}
+
+.preowned__car--atlas,
+.preowned__dust--atlas{
+    --x: 34.6%;
+    --y: 20.8%;
+    --w: 82.8%;
+    --delay: #{$car-stagger * 2};
+}
+
+.preowned__cars{
+    // 등장 시작 상태: 최종 위치보다 조금 뒤(오른쪽 위)에서 작고 흐리게
+    --car-shift-x: 36px;
+    --car-shift-y: -22px;
+    --car-scale: 0.86;
+    --car-blur: 3px;
+    // 바닥 연무의 최대 진하기와 번짐
+    --haze-opacity: 0.62;
+    --haze-blur: 10px;
+}
+
+.preowned__car{
+    position: absolute;
+    top: var(--y);
+    left: var(--x);
+    width: var(--w);
+    max-width: none;
+    // 바퀴가 닿는 바닥을 기준으로 커지고 내려앉는다
+    transform-origin: center bottom;
+    will-change: transform, opacity, filter;
+}
+
+// 섹션에 들어오기 전에는 보이지 않게 대기
+.preowned:not(.preowned--in) .preowned__car{
+    opacity: 0;
+}
+
+// 차량 한 대의 시퀀스(등장 → 도착 즉시 내려앉기 → 정지)를 하나의 애니메이션으로 묶음
+// --delay가 앞 차량의 시퀀스 전체 길이만큼 벌어져 있어서, 앞 차량이 완전히 멈춘 뒤에 다음 차량이 시작
+.preowned--in .preowned__car{
+    animation: preowned-arrive $car-duration linear var(--delay) both;
+}
+
+@keyframes preowned-arrive {
+    // 0 → 75% (0.9초): 멀리서 가까워지며 또렷
+    0% {
+        opacity: 0;
+        filter: blur(var(--car-blur));
+        transform: translate(var(--car-shift-x), var(--car-shift-y)) scale(var(--car-scale), var(--car-scale));
+        animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    9% {
+        opacity: 0.5;
+    }
+    75% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate(0, 0) scale(1, 1);
+        animation-timing-function: ease-in-out;
+    }
+    // 75 → 100% (0.3초): 도착 즉시 차체가 한 번 눌렸다가 돌아옴
+    86% {
+        transform: translate(0, var(--settle-drop)) scale(1, 0.995);
+        animation-timing-function: ease-in-out;
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate(0, 0) scale(1, 1);
+    }
+}
+
+// 바닥 연무: 바퀴와 그림자 높이에 넓게 깔리는 옅은 회색. 차량들보다 앞(위) 레이어에 둠
+.preowned__dust{
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--y) + var(--w) * 0.69);
+    left: calc(var(--x) - var(--w) * 0.06);
+    width: calc(var(--w) * 1.12);
+    height: calc(var(--w) * 0.2);
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(120, 124, 130, 0.75) 0%,
+        rgba(150, 154, 160, 0.4) 40%,
+        rgba(180, 184, 190, 0) 72%
+    );
+    filter: blur(var(--haze-blur));
+    opacity: 0;
+    pointer-events: none;
+}
+
+// 그 차량이 도착하는 순간(시퀀스의 75% 지점)에만 올라왔다가, 다음 차량이 도착하기 전에 사라짐
+.preowned--in .preowned__dust{
+    animation: preowned-haze $haze-duration ease-out calc(var(--delay) + #{$car-duration * 0.75 - 0.1s}) both;
+}
+
+@keyframes preowned-haze {
+    0% {
+        opacity: 0;
+        transform: scale(0.7, 0.8);
+    }
+    30% {
+        opacity: var(--haze-opacity);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-8%) scale(1.25, 1.1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .preowned .preowned__car{
+        animation: none;
+        opacity: 1;
+        filter: none;
+        transform: none;
+    }
+
+    .preowned .preowned__dust{
+        animation: none;
+        opacity: 0;
+    }
+}
+
+@include bp.tablet {
+  .preowned{
+      height: auto;
+      padding: 64px 0;
+  }
+
+  .preowned__container{
+    flex-direction: column;
+    gap: 87px;
+  }
+
+  .preowned__content{
+    flex: none;
+    gap: 40px;
+    padding: 0 16px;
+  }
+
+  .preowned__text{
+      gap: 8px;
+
+      .preowned__title{
+        font-size: clamp(36px, 5.5vw, 56px);
+        font-weight: 600;
+      }
+      .preowned__description{
+        font-size: clamp(16px, 2.4vw, 22px);
+      }
+  }
+
+  .preowned__search{
+    gap: 15px;
+    height: 53px;
+    padding: 10px 16px;
+    border-color: #6b6d70;
+  }
+
+  .preowned__search-icon{
+      font-size: 24px;
+  }
+
+  .preowned__search-input{
+      font-size: 16px;
+  }
+
+  .preowned__cars{
+      // 작은 화면: 이동 거리, 흐림, 내려앉는 깊이, 연무를 더 약하게
+      --car-shift-x: 14px;
+      --car-shift-y: -10px;
+      --car-scale: 0.9;
+      --car-blur: 1.5px;
+      --haze-opacity: 0.36;
+      --haze-blur: 10px;
+
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1244 / 864;
+  }
+}
+
+@include bp.mobile {
+  .preowned__text{
+      // 좁은 화면에서도 제목과 설명이 각각 두 줄을 유지하도록 화면 폭에 맞춰 줄인다
+      .preowned__title{
+        font-size: min(36px, calc((100vw - 32px) / 7.4));
+      }
+      .preowned__description{
+        font-size: min(16px, calc((100vw - 32px) / 16));
+      }
+  }
+}

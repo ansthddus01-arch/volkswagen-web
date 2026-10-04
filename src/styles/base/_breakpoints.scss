@@ -1,0 +1,28 @@
+@use "sass:math";
+
+$tablet: 1024px;
+$mobile: 400px;
+$desktop: 1920;
+
+// 1920px 시안 기준 값을 화면 폭에 비례해 줄인다 (1920px 이상에서는 원래 값 유지)
+// $min을 주면 그 값(px) 아래로는 줄어들지 않는다 (작은 글자용)
+@function fluid($px, $min: null) {
+  $value: min(#{$px}px, #{math.div($px, $desktop) * 100}vw);
+
+  @if $min {
+    @return max(#{$min}px, #{$value});
+  }
+  @return $value;
+}
+
+@mixin tablet {
+  @media (max-width: $tablet) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $mobile) {
+    @content;
+  }
+}

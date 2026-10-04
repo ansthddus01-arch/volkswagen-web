@@ -1,0 +1,177 @@
+@use "./styles/base/colors" as color;
+@use "./styles/base/breakpoints" as bp;
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: bp.fluid(883);
+  overflow: hidden;
+}
+
+.hero picture {
+  display: block;
+  height: 100%;
+}
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.hero__text {
+  position: absolute;
+  top: bp.fluid(80);
+  left: bp.fluid(60);
+  color: color.$white;
+  gap: bp.fluid(24);
+
+  h1{
+    font-size: bp.fluid(72);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  p{
+    font-size: bp.fluid(32);
+    font-weight: 400;
+  }
+}
+
+.hero__indicator {
+  position: absolute;
+  top: bp.fluid(732);
+  right: bp.fluid(60);
+  left: bp.fluid(60);
+  gap: bp.fluid(26);
+}
+
+.hero__indicator-item {
+  position: relative;
+  flex: 1;
+  padding-top: 14px;
+  color: rgba(color.$white, 0.3);
+  font-size: bp.fluid(16, 12);
+  font-weight: 500;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: rgba(color.$white, 0.4);
+  }
+}
+
+.hero__indicator-item--active {
+  flex: 0 0 bp.fluid(375);
+  color: color.$white;
+
+  &::before {
+    top: 0;
+    height: 4px;
+    background: color.$white;
+  }
+}
+
+@include bp.tablet {
+  .hero {
+    height: clamp(638px, 80vw, 820px);
+  }
+
+  .hero__image {
+    object-position: 65% bottom;
+  }
+
+  .hero__text {
+    top: 134px;
+    left: 20px;
+    gap: 20px;
+
+    h1{
+      font-size: clamp(36px, 6vw, 56px);
+    }
+    p{
+      font-size: clamp(16px, 2.6vw, 24px);
+      line-height: 1.5;
+    }
+  }
+
+  .hero__actions {
+    position: absolute;
+    bottom: 110px;
+    left: 20px;
+    gap: 20px;
+  }
+
+  .hero__button {
+    width: 130px;
+    height: 35px;
+    border: 1px solid color.$white;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .hero__button--fill {
+    background: color.$white;
+    color: #000;
+  }
+
+  .hero__indicator {
+    top: auto;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    gap: 8px;
+  }
+
+  .hero__indicator-item {
+    padding-top: 18px;
+    overflow: hidden;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &::before {
+      top: 2px;
+      height: 1px;
+    }
+  }
+
+  .hero__indicator-item--active {
+    flex: 1;
+
+    &::before {
+      top: 0;
+      height: 3px;
+    }
+  }
+}
+
+@include bp.mobile {
+  .hero {
+    height: 638px;
+  }
+
+  // 좁은 화면에서도 제목이 두 줄을 유지하도록 화면 폭에 맞춰 줄인다
+  .hero__text {
+    h1{
+      font-size: min(36px, calc((100vw - 40px) / 8.6));
+    }
+    p{
+      font-size: 16px;
+    }
+  }
+
+  .hero__actions {
+    right: 20px;
+  }
+
+  .hero__button {
+    flex: 0 1 130px;
+    width: auto;
+  }
+}
