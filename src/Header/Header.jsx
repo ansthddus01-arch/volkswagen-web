@@ -39,7 +39,16 @@ export default function Header() {
 
   return (
     <header className={`header d-flex justify-between align-center ${isMenuOpen ? "header--open" : ""}`}>
-      <Link to="/" className="header__logo">
+      {/* 메인으로 이동할 때 열린 메뉴를 닫고, 이미 메인이어도 맨 위로 올라가게 한다 */}
+      <Link
+        to="/"
+        className="header__logo"
+        aria-label="Volkswagen 메인으로"
+        onClick={() => {
+          setIsMenuOpen(false);
+          window.scrollTo(0, 0);
+        }}
+      >
         <img src={logo} alt="Volkswagen" />
       </Link>
 
