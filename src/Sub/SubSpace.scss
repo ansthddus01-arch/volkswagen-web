@@ -1,0 +1,477 @@
+@use "sass:math";
+@use "../styles/base/colors" as color;
+@use "../styles/base/breakpoints" as bp;
+
+$accent: #002bff;
+
+// 카드(시안 폭 494px) 안쪽 요소는 카드 폭에 비례해 줄인다
+@function card($px) {
+  @return math.div($px, 494) * 100cqw;
+}
+
+.sub-space {
+  padding: bp.fluid(160) bp.fluid(60);
+  overflow: hidden;
+  background: color.$black;
+  color: color.$white;
+}
+
+.sub-space__inner {
+  position: relative;
+  width: bp.fluid(1709);
+  gap: bp.fluid(178);
+}
+
+.sub-space__glow {
+  position: absolute;
+  top: bp.fluid(-108);
+  left: 0;
+  width: bp.fluid(1002);
+  height: bp.fluid(1002);
+  pointer-events: none;
+}
+
+.sub-space__head,
+.sub-space__body {
+  position: relative;
+  z-index: 1;
+}
+
+.sub-space__head {
+  gap: bp.fluid(14);
+}
+
+.sub-space__eyebrow {
+  color: $accent;
+  font-size: bp.fluid(16, 12);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.sub-space__title {
+  font-size: bp.fluid(72);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sub-space__body {
+  width: 100%;
+  gap: bp.fluid(110);
+}
+
+// 원형 궤도 위에 기능 아이콘 4개가 놓인 글래스 카드
+.sub-space__card {
+  position: relative;
+  flex-shrink: 0;
+  width: bp.fluid(494);
+  height: bp.fluid(491);
+  overflow: hidden;
+  border-radius: bp.fluid(80);
+  background: rgba(color.$white, 0.1);
+  backdrop-filter: blur(5px);
+  container-type: inline-size;
+}
+
+.sub-space__orbit {
+  position: absolute;
+  top: card(85);
+  left: card(90);
+  width: card(325);
+  height: card(325);
+}
+
+// 궤도 화살표: 시안 좌표의 중심점에 맞춰 회전
+.sub-space__orbit-arrow {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(var(--rotate));
+
+  &--1 {
+    top: card(219.7);
+    left: card(92.4);
+    --rotate: 15deg;
+  }
+
+  &--2 {
+    top: card(88.7);
+    left: card(283.8);
+    --rotate: 105deg;
+  }
+
+  &--3 {
+    top: card(283.3);
+    left: card(410.7);
+    --rotate: -150deg;
+  }
+
+  &--4 {
+    top: card(405.8);
+    left: card(220.8);
+    --rotate: -75deg;
+  }
+}
+
+.sub-space__card-title {
+  position: absolute;
+  top: card(219);
+  left: card(108);
+  width: card(289);
+  color: #fff;
+  text-align: center;
+
+  strong {
+    font-size: card(40);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  span {
+    font-size: max(11px, card(16));
+    font-weight: 400;
+  }
+}
+
+.sub-space__feature {
+  position: absolute;
+  width: card(101);
+  height: card(101);
+  gap: card(8);
+  border-radius: 50%;
+  background: rgba(color.$white, 0.3);
+  backdrop-filter: blur(2px);
+
+  img {
+    width: card(36);
+    height: card(36);
+  }
+
+  span {
+    font-size: max(10px, card(12));
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  &--1 {
+    top: card(86);
+    left: card(89);
+  }
+
+  &--2 {
+    top: card(86);
+    left: card(313);
+  }
+
+  &--3 {
+    top: card(308);
+    left: card(89);
+  }
+
+  &--4 {
+    top: card(308);
+    left: card(313);
+  }
+}
+
+.sub-space__desc {
+  flex-shrink: 0;
+  width: bp.fluid(517);
+  min-height: bp.fluid(491);
+  gap: bp.fluid(48);
+}
+
+.sub-space__desc-text {
+  gap: bp.fluid(56);
+}
+
+.sub-space__desc-block {
+  gap: bp.fluid(20);
+}
+
+.sub-space__lead {
+  font-size: bp.fluid(40);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.sub-space__sub-title {
+  font-size: bp.fluid(20, 14);
+  font-weight: 700;
+}
+
+.sub-space__copy {
+  font-size: bp.fluid(24, 14);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.sub-space__cta {
+  align-self: flex-start;
+  gap: bp.fluid(32);
+  padding: bp.fluid(10) bp.fluid(20);
+  border: 2px solid color.$white;
+  border-radius: 50px;
+  font-size: bp.fluid(24, 14);
+  font-weight: 700;
+  white-space: nowrap;
+
+  img {
+    width: bp.fluid(32);
+    height: bp.fluid(32);
+  }
+}
+
+@include bp.tablet {
+  .sub-space {
+    padding: 100px 20px;
+  }
+
+  .sub-space__inner {
+    width: 100%;
+    gap: 64px;
+  }
+
+  .sub-space__glow {
+    top: -40px;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    transform: translateX(-50%);
+  }
+
+  .sub-space__eyebrow {
+    font-size: 14px;
+  }
+
+  .sub-space__title {
+    font-size: clamp(28px, 5.5vw, 48px);
+    line-height: 1.3;
+    white-space: normal;
+    word-break: keep-all;
+  }
+
+  .sub-space__body {
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .sub-space__card {
+    width: min(494px, 100%);
+    height: auto;
+    aspect-ratio: 494 / 491;
+    border-radius: 48px;
+  }
+
+  .sub-space__desc {
+    width: 100%;
+    min-height: 0;
+    gap: 32px;
+  }
+
+  .sub-space__desc-text {
+    gap: 32px;
+  }
+
+  .sub-space__lead {
+    font-size: clamp(22px, 4vw, 32px);
+    word-break: keep-all;
+  }
+
+  .sub-space__sub-title {
+    font-size: 18px;
+  }
+
+  .sub-space__copy {
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: normal;
+  }
+
+  .sub-space__cta {
+    gap: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+
+    img {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+// 모바일 줄바꿈은 모바일 시안에서만
+.sub-space__title-break {
+  display: none;
+}
+
+// 모바일 카드(시안 폭 370px) 안쪽은 카드 폭에 비례
+@function m-card($px) {
+  @return math.div($px, 370) * 100cqw;
+}
+
+@include bp.phone {
+  .sub-space {
+    padding: 48px 16px 72px;
+  }
+
+  .sub-space__inner {
+    gap: 64px;
+  }
+
+  .sub-space__glow {
+    top: 598px;
+    left: -16px;
+    width: 470px;
+    height: 470px;
+    transform: none;
+  }
+
+  .sub-space__head {
+    align-self: stretch;
+    gap: 7px;
+  }
+
+  .sub-space__eyebrow {
+    font-size: 16px;
+  }
+
+  .sub-space__title {
+    font-size: 24px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .sub-space__title-break {
+    display: inline;
+  }
+
+  .sub-space__body {
+    align-self: stretch;
+    gap: 32px;
+  }
+
+  .sub-space__card {
+    width: 100%;
+    aspect-ratio: 370 / 440;
+    border-radius: 50px;
+  }
+
+  .sub-space__orbit {
+    top: m-card(59);
+    left: m-card(22);
+    width: m-card(325);
+    height: m-card(325);
+  }
+
+  .sub-space__orbit-arrow {
+    &--1 {
+      top: m-card(238.2);
+      left: m-card(23.4);
+      --rotate: 3.49deg;
+    }
+
+    &--2 {
+      top: m-card(64.7);
+      left: m-card(224.8);
+      --rotate: 105deg;
+    }
+
+    // 모바일 시안에서는 카드 밖으로 벗어나 보이지 않는 화살표
+    &--3 {
+      display: none;
+    }
+
+    &--4 {
+      top: m-card(379.8);
+      left: m-card(216.8);
+      --rotate: -104.54deg;
+    }
+  }
+
+  .sub-space__card-title {
+    top: 50%;
+    left: 50%;
+    width: auto;
+    transform: translate(-50%, -50%);
+
+    strong {
+      font-size: m-card(28);
+    }
+
+    span {
+      font-size: 12px;
+    }
+  }
+
+  .sub-space__feature {
+    width: m-card(101);
+    height: m-card(101);
+    gap: 8px;
+
+    img {
+      width: m-card(36);
+      height: m-card(36);
+    }
+
+    span {
+      font-size: 12px;
+    }
+
+    &--1 {
+      top: m-card(60);
+      left: m-card(23);
+    }
+
+    &--2 {
+      top: m-card(60);
+      left: m-card(247);
+    }
+
+    &--3 {
+      top: m-card(282);
+      left: m-card(23);
+    }
+
+    &--4 {
+      top: m-card(282);
+      left: m-card(247);
+    }
+  }
+
+  .sub-space__desc,
+  .sub-space__desc-text {
+    gap: 32px;
+  }
+
+  .sub-space__desc-block {
+    gap: 10px;
+  }
+
+  .sub-space__lead {
+    font-size: 24px;
+    word-break: normal;
+  }
+
+  .sub-space__sub-title {
+    font-size: 20px;
+  }
+
+  .sub-space__copy {
+    font-size: 20px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .sub-space__cta {
+    justify-content: space-between;
+    width: 196px;
+    padding: 12px;
+    font-size: 16px;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

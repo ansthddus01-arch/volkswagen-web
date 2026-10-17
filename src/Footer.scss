@@ -90,6 +90,49 @@
   cursor: default;
 }
 
+// 서브페이지: 시승신청 섹션 배경을 이어 쓰고, 위에 구분선
+.footer--sub{
+  padding-top: 0;
+  padding-bottom: bp.fluid(220);
+  background: #141623;
+
+  .footer__container{
+    gap: 0;
+    padding-top: bp.fluid(88);
+    border-top: 2px solid rgba(#fff, 0.1);
+  }
+
+  .footer__menu-list{
+    gap: 20px;
+  }
+
+  .footer__menu-link{
+    font-size: bp.fluid(16, 14);
+  }
+}
+
+// 서브페이지 모바일 시안: 위 구분선 없이 아코디언만, 구분선은 밝은 회색
+@include bp.phone {
+  // 아래쪽 태블릿 .footer 규칙보다 우선하도록 클래스 두 개로 지정
+  .footer.footer--sub{
+    padding: 0 16px 200px;
+
+    .footer__container{
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .footer__menu{
+      border-bottom-color: #dadada;
+    }
+
+    .footer__menu-chevron{
+      margin: -4px;
+      font-size: 32px;
+    }
+  }
+}
+
 @include bp.tablet {
   .footer{
       padding: 53px 16px;

@@ -1,6 +1,7 @@
 @use "sass:math";
 
 $tablet: 1024px;
+$phone: 600px;
 $mobile: 400px;
 $desktop: 1920;
 
@@ -17,6 +18,13 @@ $desktop: 1920;
 
 @mixin tablet {
   @media (max-width: $tablet) {
+    @content;
+  }
+}
+
+// 모바일 시안(402px) 적용 구간
+@mixin phone {
+  @media (max-width: $phone) {
     @content;
   }
 }

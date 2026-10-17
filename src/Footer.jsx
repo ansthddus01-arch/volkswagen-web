@@ -39,23 +39,27 @@ const snsLinks = [
   { label: "KakaoTalk", icon: kakaotalkIcon },
 ];
 
-export default function Footer() {
+// variant="sub": 서브페이지용. 바로가기 아이콘 없이 메뉴만 보여준다
+export default function Footer({ variant }) {
   const [openMenu, setOpenMenu] = useState(null);
   const toggleMenu = (name) => setOpenMenu(openMenu === name ? null : name);
+  const isSub = variant === "sub";
 
   return (
-    <footer className="footer">
+    <footer className={`footer ${isSub ? "footer--sub" : ""}`}>
       <div className="footer__container d-flex flex-column">
-        <ul className="footer__quick d-flex justify-between">
-          {quickLinks.map((item) => (
-            <li key={item.label}>
-              <a href="#" className="footer__quick-link d-flex flex-column align-center">
-                <img src={item.icon} alt="" className="footer__quick-icon" />
-                <span className="footer__quick-label lh-100">{item.label}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        {!isSub && (
+          <ul className="footer__quick d-flex justify-between">
+            {quickLinks.map((item) => (
+              <li key={item.label}>
+                <a href="#" className="footer__quick-link d-flex flex-column align-center">
+                  <img src={item.icon} alt="" className="footer__quick-icon" />
+                  <span className="footer__quick-label lh-100">{item.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
 
         <div className="footer__bottom d-flex justify-between">
           <nav className="footer__menus d-flex justify-between">

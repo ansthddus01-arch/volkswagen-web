@@ -1,0 +1,558 @@
+@use "sass:math";
+@use "../styles/base/colors" as color;
+@use "../styles/base/breakpoints" as bp;
+
+$card-bg: #171717;
+$duration: 0.5s;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+// 접힌 카드(시안 폭 225px) / 펼친 카드(시안 폭 680px) 안쪽은 각자 폭에 비례해 줄인다
+@function col($px) {
+  @return math.div($px, 225) * 100cqw;
+}
+
+@function ex($px) {
+  @return math.div($px, 680) * 100cqw;
+}
+
+.sub-inside {
+  padding: bp.fluid(160) bp.fluid(60);
+  background: linear-gradient(180deg, color.$black 30%, #3d3d3d 65%, color.$white);
+}
+
+.sub-inside__inner {
+  width: bp.fluid(1496);
+  margin: 0 auto;
+  gap: bp.fluid(79);
+}
+
+.sub-inside__head {
+  gap: bp.fluid(10);
+  color: color.$white;
+}
+
+.sub-inside__eyebrow {
+  font-size: bp.fluid(24, 14);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.sub-inside__title {
+  font-size: bp.fluid(72);
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+// 카드 크기: 펼친 폭을 기준으로 접힌 폭과 높이를 시안 비율대로 맞춘다
+.sub-inside__cards {
+  --card-expanded: #{bp.fluid(680)};
+  --card-collapsed: calc(var(--card-expanded) * 225 / 680);
+  --card-height: calc(var(--card-expanded) * 645 / 680);
+
+  justify-content: center;
+  gap: bp.fluid(47);
+  width: 100%;
+}
+
+.sub-inside__card {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--card-collapsed);
+  height: var(--card-height);
+  overflow: hidden;
+  border-radius: 10px;
+  background: $card-bg;
+  transition:
+    width $duration $ease,
+    background-color $duration $ease,
+    filter $duration $ease;
+
+  // 테두리는 위에 겹쳐 그려서 안쪽 이미지가 카드 가장자리에 딱 맞게 한다
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    pointer-events: none;
+    transition: border-color $duration $ease;
+  }
+}
+
+.sub-inside__card--active {
+  width: var(--card-expanded);
+  background: color.$white;
+  filter: drop-shadow(-10px 10px 15px rgba(164, 164, 164, 0.25))
+    drop-shadow(10px -10px 15px rgba(164, 164, 164, 0.25));
+
+  &::after {
+    border-color: #a4a4a4;
+  }
+}
+
+// 카드 전체를 덮는 투명 버튼 (클릭/키보드 선택용)
+.sub-inside__toggle {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  border-radius: inherit;
+
+  &:focus-visible {
+    outline: 2px solid #0072f9;
+    outline-offset: -2px;
+  }
+}
+
+.sub-inside__collapsed,
+.sub-inside__expanded {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  container-type: inline-size;
+}
+
+// 열릴 때: 검정 레이어는 바로 사라지고 흰 레이어는 조금 늦게 나타난다
+// 닫힐 때: 흰 레이어가 먼저 사라지고, 카드가 거의 줄어든 뒤 검정 레이어가 나타난다
+.sub-inside__collapsed {
+  transition: opacity 0.25s $ease 0.3s;
+}
+
+.sub-inside__expanded,
+.sub-inside__expanded-image {
+  opacity: 0;
+  transition: opacity 0.2s $ease;
+}
+
+.sub-inside__card--active {
+  .sub-inside__collapsed {
+    opacity: 0;
+    transition: opacity 0.2s $ease;
+  }
+
+  .sub-inside__expanded-image {
+    opacity: 1;
+    transition: opacity 0.3s $ease 0.1s;
+  }
+
+  // 글자는 카드가 거의 다 열린 뒤에 나타나서 배지가 잘려 보이지 않게 한다
+  .sub-inside__expanded {
+    opacity: 1;
+    transition: opacity 0.25s $ease 0.35s;
+  }
+}
+
+// ---------- 접힌 상태 ----------
+.sub-inside__collapsed {
+  width: var(--card-collapsed);
+  color: #fff;
+}
+
+// cqw는 컨테이너 자신에는 적용되지 않으므로 위 여백은 안쪽 요소에 준다
+.sub-inside__collapsed-text {
+  padding-top: col(50);
+  text-align: center;
+  text-transform: uppercase;
+
+  h3 {
+    margin-top: col(8);
+    font-size: col(24);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+}
+
+.sub-inside__collapsed-eyebrow {
+  font-size: max(10px, col(12));
+  font-weight: 700;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.sub-inside__collapsed-desc {
+  margin-top: col(10);
+  font-size: max(10px, col(16));
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+// 시안의 이미지 크롭 비율을 그대로 유지하고, 위아래는 카드 배경색으로 페이드
+.sub-inside__thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  overflow: hidden;
+
+  img {
+    position: absolute;
+    max-width: none;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.sub-inside__card--cockpit .sub-inside__thumb,
+.sub-inside__card--opensky .sub-inside__thumb {
+  aspect-ratio: 225 / 470;
+
+  &::after {
+    background: linear-gradient(
+      0deg,
+      $card-bg 4.018%,
+      rgba(20, 20, 20, 0.8) 19.086%,
+      rgba(17, 17, 17, 0) 57.759%,
+      rgba(21, 21, 21, 0.6) 75.338%,
+      rgba(22, 22, 22, 0.8) 85.202%,
+      $card-bg 99.538%
+    );
+  }
+}
+
+.sub-inside__card--cockpit .sub-inside__thumb img {
+  top: -20.24%;
+  left: -68.28%;
+  width: 381.78%;
+  height: 137.07%;
+}
+
+.sub-inside__card--opensky .sub-inside__thumb img {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sub-inside__card--ambient .sub-inside__thumb {
+  aspect-ratio: 225 / 340;
+  margin-top: col(42);
+
+  img {
+    top: -13.5%;
+    left: -186.74%;
+    width: 311.59%;
+    height: 154.12%;
+  }
+
+  &::after {
+    background: linear-gradient(
+      180deg,
+      $card-bg 1.7709%,
+      rgba(20, 20, 20, 0.5) 33.439%,
+      rgba(17, 17, 17, 0) 60.5%,
+      rgba(21, 21, 21, 0.6) 79.2%,
+      rgba(22, 22, 22, 0.8) 89.374%,
+      $card-bg 99.199%
+    );
+  }
+}
+
+.sub-inside__card--display .sub-inside__thumb {
+  aspect-ratio: 225 / 491;
+
+  img {
+    top: 0;
+    left: -129.25%;
+    width: 344.89%;
+    height: 118.53%;
+  }
+
+  &::after {
+    background: linear-gradient(
+      180deg,
+      $card-bg 8.8278%,
+      rgba(20, 20, 20, 0.8) 19.296%,
+      rgba(17, 17, 17, 0) 50.773%,
+      rgba(21, 21, 21, 0.6) 73.113%,
+      rgba(22, 22, 22, 0.8) 90.376%,
+      $card-bg 101.55%
+    );
+  }
+}
+
+// ---------- 펼친 상태 ----------
+.sub-inside__expanded {
+  width: var(--card-expanded);
+}
+
+// 좌우는 카드에 붙이고(폭이 변해도 가장자리 일치), 위치·높이는 펼친 폭 기준으로 고정
+.sub-inside__expanded-image {
+  position: absolute;
+  top: calc(var(--card-expanded) * 20 / 680);
+  right: 0;
+  left: 0;
+  height: calc(var(--card-expanded) * 1086 / 1448);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      color.$white 0%,
+      rgba(243, 243, 243, 0.5) 26.823%,
+      rgba(241, 241, 241, 0) 46.154%,
+      rgba(243, 243, 243, 0.5) 77.439%,
+      color.$white 94.572%
+    );
+  }
+}
+
+// 캡션은 카드 아래쪽에 고정 (제목이 두 줄이 되면 위로 늘어난다)
+.sub-inside__caption {
+  position: absolute;
+  right: ex(48.5);
+  bottom: ex(60);
+  left: ex(48.5);
+  gap: ex(24);
+}
+
+.sub-inside__caption-text {
+  gap: ex(10);
+  color: #000;
+  text-transform: uppercase;
+}
+
+.sub-inside__caption-eyebrow {
+  font-size: max(11px, ex(16));
+  font-weight: 700;
+}
+
+.sub-inside__caption-title {
+  color: color.$black;
+  font-size: ex(72);
+  font-weight: 700;
+}
+
+.sub-inside__caption-desc {
+  font-size: max(11px, ex(16));
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.sub-inside__badge {
+  flex-shrink: 0;
+  width: ex(148);
+  height: ex(40);
+  border: 1px solid color.$black;
+  border-radius: 50px;
+  color: #000;
+  font-size: max(11px, ex(20));
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+// 모바일 전용 진행바 (태블릿 이상에서는 숨김)
+.sub-inside__slider {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sub-inside__card,
+  .sub-inside__card * {
+    transition: none !important;
+  }
+}
+
+@include bp.tablet {
+  .sub-inside {
+    padding: 100px 0;
+  }
+
+  .sub-inside__inner {
+    width: 100%;
+    gap: 48px;
+  }
+
+  .sub-inside__head {
+    align-self: stretch;
+    gap: 12px;
+    padding: 0 20px;
+  }
+
+  .sub-inside__eyebrow {
+    font-size: 16px;
+  }
+
+  .sub-inside__title {
+    font-size: clamp(28px, 5.5vw, 48px);
+    white-space: normal;
+    word-break: keep-all;
+  }
+
+  // 태블릿 이하: 카드 줄을 가로로 스크롤
+  .sub-inside__cards {
+    --card-expanded: min(520px, 82vw);
+
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 24px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+// 모바일 시안: 펼친(흰색) 카드를 한 장씩 넘기는 슬라이더. Open Sky가 첫 장
+@include bp.phone {
+  .sub-inside {
+    padding: 120px 0;
+    background: linear-gradient(180deg, color.$black 16.25%, #3c3c3c 34.615%, #848484 59.615%, color.$white 100%);
+  }
+
+  .sub-inside__inner {
+    gap: 40px;
+  }
+
+  .sub-inside__head {
+    gap: 10px;
+    padding: 0 16px;
+  }
+
+  .sub-inside__title {
+    font-size: 28px;
+    word-break: normal;
+  }
+
+  // 위아래 10px 여백은 카드 그림자가 잘리지 않게 하기 위한 것
+  .sub-inside__cards {
+    gap: 16px;
+    margin: -10px 0;
+    padding: 10px 16px;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 16px;
+  }
+
+  .sub-inside__card,
+  .sub-inside__card--active {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 473px;
+    background: color.$white;
+    filter: drop-shadow(-5px 5px 5px rgba(164, 164, 164, 0.3))
+      drop-shadow(5px -5px 5px rgba(164, 164, 164, 0.3));
+    scroll-snap-align: start;
+    transition: none;
+
+    &::after {
+      border-color: #a4a4a4;
+    }
+  }
+
+  .sub-inside__card--opensky {
+    order: -1;
+  }
+
+  // 유틸 클래스(d-flex)보다 우선하도록 카드 클래스를 붙인다
+  .sub-inside__card .sub-inside__toggle,
+  .sub-inside__card .sub-inside__collapsed {
+    display: none;
+  }
+
+  .sub-inside__card .sub-inside__expanded,
+  .sub-inside__card .sub-inside__expanded-image {
+    opacity: 1;
+    transition: none;
+  }
+
+  .sub-inside__expanded {
+    width: 100%;
+  }
+
+  .sub-inside__expanded-image {
+    top: 65px;
+    height: auto;
+    aspect-ratio: 370 / 278;
+  }
+
+  // 캡션: 1줄 서브타이틀, 2줄 타이틀 + 배지
+  .sub-inside__card .sub-inside__caption {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    top: 353px;
+    right: 12px;
+    bottom: auto;
+    left: 11px;
+    gap: 10px 12px;
+  }
+
+  .sub-inside__card .sub-inside__caption-text {
+    display: contents;
+  }
+
+  .sub-inside__caption-eyebrow {
+    grid-column: 1 / -1;
+    font-size: 16px;
+  }
+
+  // 긴 제목(DIGITAL COCKPIT 등)은 두 줄로 넘겨 배지가 카드 밖으로 밀리지 않게 한다
+  .sub-inside__caption-title {
+    min-width: 0;
+    font-size: 32px;
+  }
+
+  .sub-inside__caption-desc {
+    display: none;
+  }
+
+  .sub-inside__badge {
+    align-self: center;
+    width: auto;
+    height: auto;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .sub-inside__slider {
+    display: block;
+    align-self: stretch;
+    margin: -10px 16px 0;
+  }
+
+  .sub-inside__progress {
+    position: relative;
+    height: 2px;
+    overflow: hidden;
+    background: rgba(color.$black, 0.3);
+
+    span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: color.$black;
+      transition: transform 0.3s $ease;
+    }
+  }
+
+  .sub-inside__slider-nav {
+    margin: 8px 3px 0;
+
+    button {
+      color: color.$black;
+      font-size: 10px;
+      line-height: 1;
+      text-transform: uppercase;
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+    }
+  }
+}

@@ -41,9 +41,10 @@ export default function Models() {
       wheelLock.current = true;
       indexRef.current = next;
       setActiveIndex(next);
+      // 슬라이드 전환 시간($slide-duration)에 맞춰 다음 휠 입력을 받는다
       setTimeout(() => {
         wheelLock.current = false;
-      }, 700);
+      }, 500);
     };
 
     stage.addEventListener("wheel", onWheel, { passive: false });

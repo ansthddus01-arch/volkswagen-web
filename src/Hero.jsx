@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import MainVisual from "./assets/Main_hero_img.jpg";
 import MainVisualMobile from "./assets/Main_hero_img_mobile.png";
 import "./Hero.scss";
@@ -13,14 +14,16 @@ const indicators = [
 export default function Hero() {
   return (
     <section className="hero">
-      <picture>
-        <source media="(max-width: 600px)" srcSet={MainVisualMobile} />
-        <img
-          src={MainVisual}
-          alt="Volkswagen ID.5"
-          className="hero__image"
-        />
-      </picture>
+      <Link to="/id5" className="hero__link" aria-label="ID.5 상세 페이지로 이동">
+        <picture>
+          <source media="(max-width: 600px)" srcSet={MainVisualMobile} />
+          <img
+            src={MainVisual}
+            alt="Volkswagen ID.5"
+            className="hero__image"
+          />
+        </picture>
+      </Link>
 
       <div className="container hero__content">
         <div className="grid">

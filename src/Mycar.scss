@@ -2,7 +2,7 @@
 @use "./styles/base/breakpoints" as bp;
 
 // 시트가 왼쪽 위에서 최종 위치까지 가라앉는 시간
-$seat-sink-duration: 3.6s;
+$seat-sink-duration: 2.1s;
 
 .mycar{
     position: relative;

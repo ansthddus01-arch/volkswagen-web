@@ -2,7 +2,7 @@
 @use "./styles/base/breakpoints" as bp;
 
 // 차량이 바뀔 때 이동·크기·투명도 전환 시간
-$slide-duration: 0.8s;
+$slide-duration: 0.55s;
 
 .models{
     background-color: color.$background-1;
@@ -177,7 +177,7 @@ $slide-duration: 0.8s;
 
 .model__specs,
 .models__model-name{
-  animation: models-fade-up 0.5s ease both;
+  animation: models-fade-up 0.4s ease both;
 }
 
 @keyframes models-fade-up {
